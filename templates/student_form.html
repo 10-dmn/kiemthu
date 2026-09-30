@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Thêm mới' if action == 'Thêm' else 'Chỉnh sửa' }} Hồ sơ Sinh viên{% endblock %}
+{% block content %}
+
+<div class="form-wrapper">
+  <div class="form-container">
+    <div class="form-header">
+      <div class="form-eyebrow">Hồ sơ sinh viên</div>
+      <h2 class="form-title">{{ 'Thêm mới hồ sơ' if action == 'Thêm' else 'Chỉnh sửa hồ sơ' }}</h2>
+      <p class="form-desc">Vui lòng hoàn thành các trường thông tin bên dưới để lưu vào cơ sở dữ liệu.</p>
+    </div>
+
+    <form method="post" class="student-form">
+      <div class="form-grid">
+        <!-- Họ và tên -->
+        <div class="form-field field-span-2">
+          <label for="name">Họ và Tên sinh viên <span class="required-mark">*</span></label>
+          <input type="text" id="name" name="name" placeholder="Nguyễn Văn An" value="{{ student.name if student else '' }}" required>
+        </div>
+
+        <!-- Mã sinh viên (MSSV) -->
+        <div class="form-field">
+          <label for="usn">Mã sinh viên (MSSV) <span class="required-mark">*</span></label>
+          <input type="text" id="usn" name="usn" placeholder="SV22001" value="{{ student.usn if student else '' }}" required>
+          <span class="field-hint">Mã định danh duy nhất của sinh viên.</span>
+        </div>
+
+        <!-- Năm học -->
+        <div class="form-field">
+          <label for="year">Năm học (1 - 8) <span class="required-mark">*</span></label>
+          <input type="number" id="year" name="year" min="1" max="8" placeholder="1, 2, 3, 4..." value="{{ student.year if student else '' }}" required>
+          <span class="field-hint">Khóa năm đào tạo của sinh viên.</span>
+        </div>
+
+        <!-- Chuyên ngành -->
+        <div class="form-field field-span-2">
+          <label for="branch">Chuyên ngành đào tạo <span class="required-mark">*</span></label>
+          <input type="text" id="branch" name="branch" list="branch-options" placeholder="Chọn hoặc nhập tên chuyên ngành..." value="{{ student.branch if student else '' }}" required>
+          <datalist id="branch-options">
+            <option value="Công nghệ thông tin">
+            <option value="Kỹ thuật phần mềm">
+            <option value="Trí tuệ nhân tạo">
+            <option value="An toàn thông tin">
+            <option value="Hệ thống thông tin">
+            <option value="Quản trị kinh doanh">
+          </datalist>
+        </div>
+
+        <!-- Email -->
+        <div class="form-field">
+          <label for="email">Địa chỉ Email</label>
+          <input type="email" id="email" name="email" placeholder="sinhvien@donga.edu.vn" value="{{ student.email if student else '' }}">
+        </div>
+
+        <!-- Số điện thoại -->
+        <div class="form-field">
+          <label for="phone">Số điện thoại</label>
+          <input type="tel" id="phone" name="phone" placeholder="0912345678" value="{{ student.phone if student else '' }}">
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Hủy và quay lại</a>
+        <button type="submit" class="btn btn-primary">{{ 'Lưu hồ sơ' if action == 'Thêm' else 'Lưu thay đổi' }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

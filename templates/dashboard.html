@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Bảng điều khiển - Quản lý Hồ sơ Sinh viên{% endblock %}
+{% block content %}
+
+<!-- Header Title Section -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Danh sách hồ sơ sinh viên</h1>
+    <p class="page-subtitle">Quản lý, tìm kiếm và cập nhật thông tin hồ sơ sinh viên trong hệ thống</p>
+  </div>
+  <div class="page-actions">
+    <a class="btn btn-primary btn-add" href="{{ url_for('add_student') }}">Thêm sinh viên</a>
+  </div>
+</div>
+
+<!-- KPI Stats Row (Minimal & Elegant) -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-label">Tổng số sinh viên</div>
+    <div class="stat-value">{{ total_count }}</div>
+    <div class="stat-desc">Hồ sơ đã lưu trữ</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Chuyên ngành đào tạo</div>
+    <div class="stat-value">{{ branches|length }}</div>
+    <div class="stat-desc">Đang được quản lý</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Hồ sơ hiển thị</div>
+    <div class="stat-value">{{ match_count }}</div>
+    <div class="stat-desc">Khớp bộ lọc hiện tại</div>
+  </div>
+</div>
+
+<!-- Filter & Search Toolbar -->
+<div class="filter-card">
+  <form method="get" action="{{ url_for('dashboard') }}" class="search-form">
+    <div class="input-wrap search-wrap">
+      <input type="search" name="q" placeholder="Tìm theo họ tên hoặc mã sinh viên..." value="{{ q }}">
+    </div>
+    
+    <div class="input-wrap">
+      <select name="branch" class="filter-select">
+        <option value="">Tất cả chuyên ngành</option>
+        {% for b in branches %}
+          <option value="{{b}}" {% if sel_branch==b %}selected{% endif %}>{{ b }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    <div class="input-wrap">
+      <select name="year" class="filter-select">
+        <option value="">Tất cả năm học</option>
+        {% for y in years %}
+          <option value="{{y}}" {% if sel_year==y %}selected{% endif %}>Năm {{y}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
+    
+    {% if q or sel_branch or sel_year %}
+      <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Đặt lại bộ lọc</a>
+    {% endif %}
+  </form>
+</div>
+
+<!-- Students Data Table -->
+<div class="table-container">
+  <table class="students-table">
+    <thead>
+      <tr>
+        <th style="width: 50px;">#</th>
+        <th>Họ và Tên</th>
+        <th>Mã sinh viên</th>
+        <th>Chuyên ngành</th>
+        <th>Năm học</th>
+        <th>Email</th>
+        <th>Số điện thoại</th>
+        <th style="text-align: right; width: 180px;">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in students %}
+      <tr data-id="{{ s.id }}">
+        <td class="col-index">{{ loop.index }}</td>
+        <td>
+          <span class="student-name">{{ s.name }}</span>
+        </td>
+        <td>
+          <span class="student-usn">{{ s.usn }}</span>
+        </td>
+        <td>
+          <span class="tag-branch">{{ s.branch }}</span>
+        </td>
+        <td>
+          <span class="tag-year">Năm {{ s.year }}</span>
+        </td>
+        <td class="col-muted">{{ s.email or '—' }}</td>
+        <td class="col-mono">{{ s.phone or '—' }}</td>
+        <td style="text-align: right;">
+          <div class="action-group">
+            <a class="btn-action btn-view" href="{{ url_for('view_student', sid=s.id) }}">Xem</a>
+            <a class="btn-action btn-edit" href="{{ url_for('edit_student', sid=s.id) }}">Sửa</a>
+            <form method="post" action="{{ url_for('delete_student', sid=s.id) }}" style="display:inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa hồ sơ sinh viên này?')">
+              <button type="submit" class="btn-action btn-delete">Xóa</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="8">
+          <div class="empty-state">
+            <p class="empty-title">Không tìm thấy hồ sơ sinh viên</p>
+            <p class="empty-desc">Không có dữ liệu phù hợp với điều kiện tìm kiếm hoặc bộ lọc hiện tại.</p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Hệ thống Quản lý Sinh viên{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-container">
+      <a href="{{ url_for('dashboard') }}" class="brand">
+        <span class="brand-mark"></span>
+        <div>
+          <div class="brand-title">HỆ THỐNG QUẢN LÝ HỒ SƠ SINH VIÊN</div>
+          <span class="brand-sub">Đồ án Kiểm thử phần mềm • Nhóm 21 - Đại học Đông Á</span>
+        </div>
+      </a>
+      
+      <nav class="header-nav">
+        {% if session.username %}
+        <div class="user-info">
+          <span class="user-role">Quản trị viên</span>
+          <span class="user-name">{{ session.username }}</span>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-logout">Đăng xuất</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashes">
+        {% for category, msg in messages %}
+          <div class="flash {{category}}">
+            <span class="flash-indicator"></span>
+            <span class="flash-text">{{ msg }}</span>
+          </div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p class="footer-title">Hệ thống Quản lý Hồ sơ Sinh viên</p>
+      <p class="footer-meta">Môn học: Kiểm thử phần mềm &bull; Thực hiện: <strong>Đào Đức Mạnh (Nhóm 21)</strong> &bull; Trường Đại học Đông Á</p>
+    </div>
+  </footer>
+</body>
+</html>

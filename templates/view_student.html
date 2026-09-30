@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Hồ sơ sinh viên: {{ student.name }}{% endblock %}
+{% block content %}
+
+<div class="view-wrapper">
+  <div class="view-container">
+    <div class="view-header">
+      <div>
+        <div class="view-eyebrow">Chi tiết hồ sơ</div>
+        <h1 class="view-title">{{ student.name }}</h1>
+        <div class="view-usn">{{ student.usn }}</div>
+      </div>
+      <div>
+        <span class="tag-branch" style="font-size: 0.85rem; padding: 6px 14px;">{{ student.branch }}</span>
+      </div>
+    </div>
+
+    <div class="info-list">
+      <div class="info-row">
+        <span class="info-label">Khóa đào tạo</span>
+        <span class="info-value">Sinh viên Năm {{ student.year }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Chuyên ngành</span>
+        <span class="info-value">{{ student.branch }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Địa chỉ Email</span>
+        <span class="info-value">{{ student.email or 'Chưa cập nhật' }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Số điện thoại</span>
+        <span class="info-value">{{ student.phone or 'Chưa cập nhật' }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Ngày khởi tạo hồ sơ</span>
+        <span class="info-value">{{ student.created_at.strftime('%d/%m/%Y %H:%M') if student.created_at else '—' }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Mã hệ thống</span>
+        <span class="info-value">#{{ student.id }}</span>
+      </div>
+    </div>
+
+    <div class="view-actions">
+      <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Quay lại danh sách</a>
+      <a href="{{ url_for('edit_student', sid=student.id) }}" class="btn btn-primary">Chỉnh sửa hồ sơ</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
